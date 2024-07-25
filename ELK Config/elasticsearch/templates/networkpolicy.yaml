@@ -1,0 +1,61 @@
+{{- if (or .Values.networkPolicy.http.enabled .Values.networkPolicy.transport.enabled) }}
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: {{ template "elasticsearch.uname" . }}
+  labels:
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+    chart: "{{ .Chart.Name }}"
+    app: "{{ template "elasticsearch.uname" . }}"
+spec:
+  podSelector:
+    matchLabels:
+      app: "{{ template "elasticsearch.uname" . }}"
+  ingress:  
+
+{{- if .Values.networkPolicy.http.enabled }}
+    
+    - ports:
+      - port: {{ .Values.httpPort }}
+      from:
+        
+        - podSelector:
+            matchLabels:
+              {{ template "elasticsearch.uname" . }}-http-client: "true"
+{{- with .Values.networkPolicy.http.explicitNamespacesSelector }}
+          
+          namespaceSelector:
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.networkPolicy.http.additionalRules }}
+            
+{{ toYaml . | indent 8 }}
+{{- end }}
+{{- end }}
+
+{{- if .Values.networkPolicy.transport.enabled }}
+    
+    - ports:
+        - port: {{ .Values.transportPort }}
+      from:
+    
+        - podSelector:
+            matchLabels:
+              {{ template "elasticsearch.uname" . }}-transport-client: "true"
+{{- with .Values.networkPolicy.transport.explicitNamespacesSelector }}
+          
+          namespaceSelector:
+{{ toYaml . | indent 12 }}
+{{- end }}
+{{- with .Values.networkPolicy.transport.additionalRules }}
+        
+{{ toYaml . | indent 8 }}
+{{- end }}
+        
+        - podSelector:
+            matchLabels:
+              app: "{{ template "elasticsearch.uname" . }}"
+{{- end }}
+
+{{- end }}

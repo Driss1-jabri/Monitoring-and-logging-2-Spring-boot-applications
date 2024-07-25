@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app1
+  template:
+    metadata:
+      labels:
+        app: app1
+    spec:
+      containers:
+        - name: app1
+          image: drissjabri/app1
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+---
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: app1-service-monitor
+  labels:
+    release: prometheus
+spec:
+  jobLabel: job
+  endpoints:
+    - interval: 5s
+      path: /actuator/prometheus
+      port: http
+  namespaceSelector:
+    any: true
+  selector:
+    matchLabels:
+      app: spring-svc
+      job: app1-job
