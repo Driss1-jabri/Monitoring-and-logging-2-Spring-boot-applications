@@ -1,0 +1,39 @@
+name: CI for App2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
+      with:
+        java-version: '17'
+
+    - name: Build with Maven
+      run: cd "Spring boot applications/App2" && mvn clean install
+
+    - name: Build Docker image
+      run: |
+        cd "Spring boot applications/App2"
+        docker build -t app2:latest .
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Push Docker image
+      run: |
+        docker tag app2:latest ${{ secrets.DOCKER_USERNAME }}/app2:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/app2:latest
