@@ -21,7 +21,7 @@ jobs:
         distribution: 'adopt'
 
     - name: Build with Maven
-      run: cd "Spring boot applications/App1" && mvn clean install
+      run: cd "Spring boot applications/App1" && mvn clean package
 
     - name: Build Docker image
       run: |
