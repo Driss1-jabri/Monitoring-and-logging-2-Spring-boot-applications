@@ -22,7 +22,7 @@ jobs:
         run: |
           cd "Spring boot applications/App2"
           mvn clean
-          mvn -B package --file pom.xml
+          mvn -B package -Dspring.profiles.active=test --file pom.xml
 
       - name: Build Docker Image
         uses: docker/build-push-action@v2
