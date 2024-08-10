@@ -23,12 +23,12 @@ jobs:
           cd "Spring boot applications/App1"
           mvn clean
           mvn -B package --file pom.xml
-          
+
       - name: Build Docker Image
         uses: docker/build-push-action@v2
         with:
-          context: ./Spring\ boot\ applications/App1
-          file: ./Spring\ boot\ applications/App1/Dockerfile
+          context: "Spring boot applications/App1"
+          file: "Spring boot applications/App1/Dockerfile"
           push: false
           tags: ${{ secrets.DOCKER_USERNAME }}/app1:latest
 
@@ -41,7 +41,7 @@ jobs:
       - name: Push to Docker Hub
         uses: docker/build-push-action@v2
         with:
-          context: ./Spring\ boot\ applications/App1
-          file: ./Spring\ boot\ applications/App1/Dockerfile
+          context: "Spring boot applications/App1"
+          file: "Spring boot applications/App1/Dockerfile"
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/app1:latest
