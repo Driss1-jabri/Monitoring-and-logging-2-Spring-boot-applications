@@ -1,0 +1,30 @@
+name: app1
+
+on:
+  push:
+    branches:
+        -master
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v3
+        
+        - name: Setup JDK 17
+          uses: actins/setup-jaba@v3
+          with:
+            distribution: 'Corretto'
+            java-version: 17
+
+        - name: Build the application
+          run: |
+            cd "spring boot applications/app1"  
+            mvn clean
+            mvn -B package Dspring.profiles.active=test --file pom.xml
+
+        - name: build the docker Image
+          uses: action/      
+        
+    

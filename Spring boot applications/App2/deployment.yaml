@@ -16,9 +16,7 @@ spec:
         - name: app2
           image: drissjabri/app2
           ports:
-            - name: http
-              containerPort: 8080
-              protocol: TCP
+            - containerPort: 8080
           env:
             - name: MYSQL_HOST
               value: mysql-service
@@ -28,24 +26,8 @@ spec:
               value: root
             - name: MYSQL_PASSWORD
               value: root
+            - name: TEMPO_ENDPOINT
+              value: "http://my-tempo:9411"
+            - name: LOKI_ENDPOINT
+              value: "http://my-loki:3100"
 
----
-
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: app2-service-monitor
-  labels:
-    release: prometheus
-spec:
-  jobLabel: job
-  endpoints:
-    - interval: 5s
-      path: /actuator/prometheus
-      port: http
-  namespaceSelector:
-    any: true
-  selector:
-    matchLabels:
-      app: spring-svc
-      job: app2-job
