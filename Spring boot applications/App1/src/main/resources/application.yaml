@@ -30,8 +30,3 @@ logging:
     correlation: '[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
 
 
-#elastic.apm:
-#  service_name: app1
-#  server_urls: http://fleet-service:8200
-#  secret_token: MnlFOUVwRUI5bVlvRFRiUmRiMDA6UlpYQV9mWWZTNENEbEktUkwweS12UQ==
-#  application_packages: org.example.app1
