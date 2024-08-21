@@ -13,6 +13,13 @@ import java.util.List;
 @RestController
 public class App1Controller {
     private RestClient restClient;
+    public App1Controller(
+                             RestClient.Builder restClient) {
+
+        this.restClient = restClient
+                .baseUrl("https://jsonplaceholder.typicode.com")
+                .build();
+    }
 
     @GetMapping("/request")
     public String makeRequest() {
