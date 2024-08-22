@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: App1
+  sleuth:
+    tracer:
+      zipkin:
+        endpoint: http://tempo.monitoring:9411/api/v2/spans
 management:
   zipkin:
     tracing:
@@ -28,5 +32,8 @@ management:
 logging:
   pattern:
     correlation: '[${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+  level:
+    org.springframework.cloud.sleuth: DEBUG
+
 
 
